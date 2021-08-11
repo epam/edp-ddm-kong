@@ -776,3 +776,9 @@ extraSecrets: []
 # - name: my-secret
 #   mountPath: /mount/to/my/location
 #   subPath: my-subpath # Optional, if you wish to mount a single key and not the entire ConfigMap
+
+kongIngress:
+  name: kong-set-timeouts
+  connect_timeout: 29000
+  read_timeout: 29000
+  write_timeout: 29000
