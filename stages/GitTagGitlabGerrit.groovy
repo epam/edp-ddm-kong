@@ -16,7 +16,7 @@ class GitTagGitlabGerrit {
                     script.sh """
                         git config --global user.email ${context["${context.gerritGitserver}"].user}@epam.com
                         git config --global user.name ${context["${context.gerritGitserver}"].user}
-                        git tag -a ${context.codebase.vcsTag} -m 'Tag is added automatically by ${context["${context.gerritGitserver}"].user} user' || echo Tag already exists
+                        git tag -a ${context.codebase.vcsTag} -m 'Tag is added automatically by ${context["${context.gerritGitserver}"].user} user'
                         git push ${context["${context.gerritGitserver}"].repoUrl} --tags
                     """
                 } catch (Exception e) {
