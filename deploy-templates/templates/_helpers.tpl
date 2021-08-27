@@ -23,6 +23,7 @@ helm.sh/chart: {{ template "kong.chart" . }}
 app.kubernetes.io/instance: "{{ .Release.Name }}"
 app.kubernetes.io/managed-by: "{{ .Release.Service }}"
 app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
+relatedNamespace: {{ .Release.Namespace }}
 {{- end -}}
 
 {{- define "kong.selectorLabels" -}}
