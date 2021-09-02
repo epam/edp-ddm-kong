@@ -71,7 +71,7 @@ function make_oidc(oidcConfig)
       ngx.log(ngx.DEBUG, "Entering recovery page: " .. oidcConfig.recovery_page_path)
       ngx.redirect(oidcConfig.recovery_page_path)
     end
-	  ngx.log(ngx.DEBUG, "Error while requesting " .. ngx.var.request_uri)
+	ngx.log(ngx.DEBUG, "Error while requesting " .. target_url)
     utils.exit(500, err, ngx.HTTP_INTERNAL_SERVER_ERROR)
   end
   return res
