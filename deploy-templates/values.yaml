@@ -433,13 +433,13 @@ updateStrategy: {}
 
 # If you want to specify resources, uncomment the following
 # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-resources: {}
-  # limits:
-  #  cpu: 100m
-  #  memory: 256Mi
-  # requests:
-  #  cpu: 100m
-  #  memory: 256Mi
+resources:
+  limits:
+    cpu: 300m
+    memory: 1Gi
+  requests:
+    cpu: 300m
+    memory: 1Gi
 
 # readinessProbe for Kong pods
 # If using Kong Enterprise with RBAC, you must add a Kong-Admin-Token header
