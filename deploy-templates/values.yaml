@@ -9,6 +9,9 @@
 # - Miscellaneous parameters
 # - Kong Enterprise parameters
 
+global:
+  disableRequestsLimits: false
+
 # -----------------------------------------------------------------------------
 # Deployment parameters
 # -----------------------------------------------------------------------------
