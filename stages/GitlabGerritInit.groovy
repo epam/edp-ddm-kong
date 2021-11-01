@@ -16,9 +16,10 @@ class GitlabGerritInit {
         context.projectName = context.git.repositoryRelativePath.replaceFirst("/", "")
         context.gitServers = [:]
         GitServerType.values().each {
-            String name = it.getValue() == "gerrit" ? "gerrit-public" : it.getValue()
+            String name = it.getValue()
             String user = getGitserverSpecField(context, name, "gitUser")
-            String host = getGitserverSpecField(context, name, "gitHost")
+            String host = name == "gerrit" ? getGitserverSpecField(context, "${name}-public", "gitHost") :
+                    getGitserverSpecField(context, name, "gitHost")
             String port = getGitserverSpecField(context, name, "sshPort")
             String credentialsId = getGitserverSpecField(context, name, "nameSshKeySecret")
             String repoUrl = "ssh://${user}@${host}:${port}/${context.projectName}"
