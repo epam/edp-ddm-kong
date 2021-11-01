@@ -1,5 +1,7 @@
 package stages
 
+import com.epam.edp.customStages.impl.multigit.helper.GitServer
+import com.epam.edp.customStages.impl.multigit.helper.GitServerType
 import com.epam.edp.stages.impl.ci.ProjectType
 import com.epam.edp.stages.impl.ci.Stage
 
@@ -11,38 +13,22 @@ class GitlabGerritInit {
     private final String GITSERVER_CR_NAME = "gitserver"
 
     void run(context) {
-        context.gitlabGitserver = "gitlab"
-        context.gerritGitserver = "gerrit"
         context.projectName = context.git.repositoryRelativePath.replaceFirst("/", "")
-
-        context["${context.gitlabGitserver}"] = [:]
-        context["${context.gitlabGitserver}"].user = getGitserverSpecField(context, context.gitlabGitserver, "gitUser")
-        context["${context.gitlabGitserver}"].host = getGitserverSpecField(context, context.gitlabGitserver, "gitHost")
-        context["${context.gitlabGitserver}"].port = getGitserverSpecField(context, context.gitlabGitserver, "sshPort")
-        context["${context.gitlabGitserver}"].credentialsId = getGitserverSpecField(context, context.gitlabGitserver, "nameSshKeySecret")
-        context["${context.gitlabGitserver}"].repoUrl = "ssh://${context["${context.gitlabGitserver}"].user}@${context["${context.gitlabGitserver}"].host}:" +
-                "${context["${context.gitlabGitserver}"].port}/${context.projectName}"
-
-        context["${context.gerritGitserver}"] = [:]
-        context["${context.gerritGitserver}"].user = getGitserverSpecField(context, context.gerritGitserver, "gitUser")
-        context["${context.gerritGitserver}"].host = context.platform.getJsonPathValue("route", "gerrit", ".spec.host")
-        context["${context.gerritGitserver}"].port = getGitserverSpecField(context, context.gerritGitserver, "httpsPort")
-        context["${context.gerritGitserver}"].credentialsId = "gerrit-ciuser-password"
-        script.withCredentials([script.usernamePassword(credentialsId: "${context["${context.gerritGitserver}"].credentialsId}",
-                passwordVariable: 'password', usernameVariable: 'username')]) {
-            context["${context.gerritGitserver}"].repoUrl = "https://${context["${context.gerritGitserver}"].user}:${script.password}@" +
-                    "${context["${context.gerritGitserver}"].host}:" +
-                    "${context["${context.gerritGitserver}"].port}/${context.projectName}"
+        context.gitServers = [:]
+        GitServerType.values().each {
+            String name = it.getValue() == "gerrit" ? "gerrit-public" : it.getValue()
+            String user = getGitserverSpecField(context, name, "gitUser")
+            String host = getGitserverSpecField(context, name, "gitHost")
+            String port = getGitserverSpecField(context, name, "sshPort")
+            String credentialsId = getGitserverSpecField(context, name, "nameSshKeySecret")
+            String repoUrl = "ssh://${user}@${host}:${port}/${context.projectName}"
+            boolean isActive = (name == context.git.gitServerCrName)
+            context.gitServers.put(it, new GitServer(name, user, host, port, credentialsId, repoUrl, isActive))
         }
-
-        context["${context.gitlabGitserver}"].token = new String(context.platform.getJsonPathValue("secret",
-                "git-epam-ciuser-api-token", ".data.token").decodeBase64())
-
     }
 
     private String getGitserverSpecField(context, String gitserver, String jsonPath) {
         return context.platform.getJsonPathValue(GITSERVER_CR_NAME, gitserver, ".spec.${jsonPath}")
     }
 }
-
 return GitlabGerritInit
