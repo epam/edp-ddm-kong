@@ -76,7 +76,14 @@ function M.get_options(config, ngx)
 	  revoke_tokens_on_logout = config.revoke_tokens_on_logout,
 	  session_opts = getSessionOpts(config.session_opts),
     access_token_expires_leeway = config.access_token_expires_leeway,
-    post_logout_redirect_uri = config.post_logout_redirect_uri
+    post_logout_redirect_uri = config.post_logout_redirect_uri,
+    --Authorization properties
+    enable_authorization = config.enable_authorization,
+    issuers_allowed = config.issuers_allowed,
+    scopes_required = config.scopes_required,
+    roles_required = config.roles_required,
+    realm_roles_required = config.realm_roles_required,
+    client_roles_required = config.client_roles_required
   }
 end
 
