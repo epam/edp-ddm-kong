@@ -27,6 +27,7 @@ return {
     user_header_name = { type = "string", required = true, default = "X-Userinfo" },
     revoke_tokens_on_logout = {type = "boolean", required = false, default = false},
     session_opts = { type = "string"},
+    access_token_expires_leeway = { type = "number", required = false },
     post_logout_redirect_uri = { type = "string", required = false}
   }
 }

@@ -75,6 +75,7 @@ function M.get_options(config, ngx)
 	  user_header_name = config.user_header_name,
 	  revoke_tokens_on_logout = config.revoke_tokens_on_logout,
 	  session_opts = getSessionOpts(config.session_opts),
+    access_token_expires_leeway = config.access_token_expires_leeway,
     post_logout_redirect_uri = config.post_logout_redirect_uri
   }
 end
