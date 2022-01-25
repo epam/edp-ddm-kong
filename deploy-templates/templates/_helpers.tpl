@@ -416,7 +416,7 @@ The name of the service used for the ingress controller's validation webhook
 {{- if .Values.ingressController.image.unifiedRepoTag }}
   image: "{{ .Values.ingressController.image.unifiedRepoTag }}"
 {{- else }}
-  image: "{{ .Values.ingressController.image.repository }}:{{ .Values.ingressController.image.tag }}"
+  image: "{{ include "imageRegistry" . }}{{ .Values.ingressController.image.repository }}:{{ .Values.ingressController.image.tag }}"
 {{- end }}
   imagePullPolicy: {{ .Values.image.pullPolicy }}
   readinessProbe:
@@ -432,6 +432,13 @@ The name of the service used for the ingress controller's validation webhook
     readOnly: true
 {{- end }}
 {{- end -}}
+
+{{- define "imageRegistry" -}}
+{{- if .Values.global.imageRegistry -}}
+{{- printf "%s/" .Values.global.imageRegistry -}}
+{{- else -}}
+{{- end -}}
+{{- end }}
 
 {{- define "secretkeyref" -}}
 valueFrom:
