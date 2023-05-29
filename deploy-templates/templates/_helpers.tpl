@@ -727,3 +727,11 @@ sidecar.istio.io/proxyMemory: {{ .Values.global.registry.kong.istio.sidecar.reso
 {{- uuidv4 | b64enc }}
 {{- end }}
 {{- end }}
+
+{{- define "horizontalPodAutoscaler.apiVersion" }}
+{{- if eq .Values.global.clusterVersion "4.9.0" }}
+{{- printf "%s" "autoscaling/v2beta2" }}
+{{- else }}
+{{- printf "%s" "autoscaling/v2" }}
+{{- end }}
+{{- end }}
